@@ -42,18 +42,18 @@ try
         lc.ReadFrom.Configuration(builder.Configuration);
         lc.Enrich.FromLogContext();
 
-        lc.WriteTo.Elasticsearch(new[] { new Uri("http://localhost:9200") }, opts =>
-        {
-            opts.DataStream = new DataStreamName("logs", "customer-service", "demo");
-            opts.BootstrapMethod = BootstrapMethod.Failure;
-        }, transport =>
-        {
-            transport.Authentication(new BasicAuthentication("elastic", "elastic1234")); 
-        });
+        //lc.WriteTo.Elasticsearch(new[] { new Uri("http://localhost:9200") }, opts =>
+        //{
+        //    opts.DataStream = new DataStreamName("logs", "customer-service", "demo");
+        //    opts.BootstrapMethod = BootstrapMethod.Failure;
+        //}, transport =>
+        //{
+        //    transport.Authentication(new BasicAuthentication("elastic", "elastic1234")); 
+        //});
     });
 
     var app = builder.Build();
-
+    app.UsePathBase("/customers");
     app.MapHealthChecks("/healthz");
 
     app.UseSerilogRequestLogging();

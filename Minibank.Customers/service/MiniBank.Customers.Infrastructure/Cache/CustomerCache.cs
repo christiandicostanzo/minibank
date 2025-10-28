@@ -6,7 +6,7 @@ using System.Text.Json.Serialization.Metadata;
 
 namespace MiniBank.CustomersSrv.Infrastructure.Cache;
 
-public class CustomersCacheTwo
+public class CustomersCache
 (
 IRedisClientWrapper redisClientWrapper
 )
