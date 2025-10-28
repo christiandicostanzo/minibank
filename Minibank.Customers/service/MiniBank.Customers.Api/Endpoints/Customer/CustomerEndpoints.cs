@@ -7,7 +7,6 @@ using MiniBank.ResultPattern;
 namespace MiniBank.CustomersSrv.Api.Endpoints.Customer;
 
 public static class CustomerEndpoints
-
 {
     public static WebApplication AddCustomerEndpoints(this WebApplication app)
     {

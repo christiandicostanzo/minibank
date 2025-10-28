@@ -73,6 +73,8 @@ try
     app.MapControllers();
     app.AddMiniBankEndpoints();
 
+    app.UseMiddleware<MiniBank.Security.JwtAuthenticationMiddleware>();
+
     app.UseMinibankCustomExceptionHandler();
 
     app.Run();

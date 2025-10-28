@@ -12,20 +12,23 @@ IRedisClientWrapper redisClientWrapper
 )
 : IMinibankEntityCache<Customer>
 {
-    public bool SaveList(string key, IList<Customer> customers)
+
+    const string CUSTOMER_LIST_KEY = "CUSTOMER_LIST";
+
+    public bool SaveList(IList<Customer> customers)
     {
         JsonSerializerOptions options = new JsonSerializerOptions();
         options.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
 
         var customersJson = JsonSerializer.Serialize(customers, options);
-        RedisKey redisKey = new(key);
+        RedisKey redisKey = new(CUSTOMER_LIST_KEY);
         RedisValue redisValue = new(customersJson);
         return redisClientWrapper.Database.StringSet(redisKey, redisValue);
     }
 
-    public List<Customer> GetList(string key)
+    public List<Customer> GetList()
     {
-        RedisKey redisKey = new(key);
+        RedisKey redisKey = new(CUSTOMER_LIST_KEY);
         RedisValue redisValue = redisClientWrapper.Database.StringGet(redisKey);
         List<Customer> cachedCustomers = new();
 
@@ -35,43 +38,6 @@ IRedisClientWrapper redisClientWrapper
         if (redisValue.HasValue)
         {
             //cachedCustomers = JsonSerializer.Deserialize<List<Customer>>(redisValue, options);
-        }
-
-        return cachedCustomers;
-    }
-
-}
-
-
-public class CustomersCache
-(
-IRedisClientWrapper redisClientWrapper
-)
-: IMinibankEntityCache<Customer>
-{
-    public bool SaveList(string key, IList<Customer> customers)
-    {
-        JsonSerializerOptions options = new JsonSerializerOptions();
-        options.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
-
-        var customersJson = JsonSerializer.Serialize(customers, options);
-        RedisKey redisKey = new(key);
-        RedisValue redisValue = new(customersJson);
-        return redisClientWrapper.Database.StringSet(redisKey, redisValue);
-    }
-
-    public List<Customer> GetList(string key)
-    {
-        RedisKey redisKey = new(key);
-        RedisValue redisValue = redisClientWrapper.Database.StringGet(redisKey);
-        List<Customer> cachedCustomers = new();
-
-        JsonSerializerOptions options = new JsonSerializerOptions();
-        options.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
-
-        if (redisValue.HasValue)
-        {
-           // cachedCustomers = JsonSerializer.Deserialize<List<Customer>>(redisValue, options);
         }
 
         return cachedCustomers;
