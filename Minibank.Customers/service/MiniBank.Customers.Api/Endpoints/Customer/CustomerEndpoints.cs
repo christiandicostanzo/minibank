@@ -20,7 +20,7 @@ public static class CustomerEndpoints
             .MapGet("/{customerId}", GetCustomerById)
             .WithName("GetCustomerById 1")
             .WithSummary("Es el endpoint que permite obtener los customer por ID")
-            .Produces<CustomerResponse>(201);
+            .Produces<CustomerEntitiyResponse>(201);
 
         customerApi.MapPost("/", CreateCustomer);
         customerApi.MapPost("/{customerId}", UpdateCustomer);
@@ -31,7 +31,7 @@ public static class CustomerEndpoints
     }
 
 
-    public static async Task<Results<Ok<CustomerResponse>, IResult>> CreateCustomer(
+    public static async Task<Results<Ok<CustomerEntitiyResponse>, IResult>> CreateCustomer(
         CreateCustomerRequest request,
         IMediator mediator,
         CancellationToken cancellation)
@@ -39,12 +39,12 @@ public static class CustomerEndpoints
 
         var result = await mediator.Send(request, cancellation);
 
-        if (result.IsSuccess)
+        if (result.IsError)
         {
-            return TypedResults.Ok(result.Payload);
+            return TypedResults.BadRequest(result.Error);
         }
 
-        return TypedResults.BadRequest();
+        return TypedResults.Ok(result.Payload);  
     }
 
     public static async Task<IResult> CreateCustomerAddress(
@@ -58,7 +58,12 @@ public static class CustomerEndpoints
 
         var result = await mediator.Send(createCustomerRequest, cancellationToken);
 
-        return TypedResults.BadRequest();
+        if (result.IsError)
+        { 
+            return TypedResults.BadRequest(result.Error);
+        }
+
+        return TypedResults.Ok(result.Payload);
     }
 
     public static async Task<IResult> UpdateCustomer(
@@ -71,8 +76,15 @@ public static class CustomerEndpoints
         updateCustomerRequest.Id = customerId;
 
         var result = await mediator.Send(updateCustomerRequest, cancellation);
-        return result is not null ? TypedResults.Ok("result.Payload") : TypedResults.NotFound();
+
+        if(result.IsError)
+        {
+            return TypedResults.NotFound(result.Error);
+        }
+
+        return TypedResults.Ok(result.Payload);
     }
+
 
     public static async Task<Results<Ok<string>, IResult>> GetCustomerById(
        Guid customerId,
@@ -87,7 +99,12 @@ public static class CustomerEndpoints
 
         var result = await mediator.Send(customerIdRequest, cancellation);
 
-        return result is not null ? TypedResults.Ok("result.Payload") : TypedResults.NotFound();
+        if (result.IsError)
+        {
+            return TypedResults.NotFound(result.Error);
+        }
+
+        return TypedResults.Ok(result.Payload);
     }
 
 }

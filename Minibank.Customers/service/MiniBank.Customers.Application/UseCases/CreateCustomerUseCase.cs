@@ -20,10 +20,10 @@ public class CreateCustomerUseCase
     ILogger<CreateCustomerUseCase> logger,
     IServiceRegistry serviceRegistry
 )
-: IRequestHandler<CreateCustomerRequest, Result<CustomerResponse>>
+: IRequestHandler<CreateCustomerRequest, Result<CustomerEntitiyResponse>>
 {
 
-    public async Task<Result<CustomerResponse>> Handle(CreateCustomerRequest request, CancellationToken cancellationToken)
+    public async Task<Result<CustomerEntitiyResponse>> Handle(CreateCustomerRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -63,7 +63,7 @@ public class CreateCustomerUseCase
 
             await customerRepository.Save(customer, cancellationToken);
 
-            var createCustomerResponse = new CustomerResponse()
+            var createCustomerResponse = new CustomerEntitiyResponse()
             {
                 Id = customer.EntityId,
                 FirstName = customer.FirstName,

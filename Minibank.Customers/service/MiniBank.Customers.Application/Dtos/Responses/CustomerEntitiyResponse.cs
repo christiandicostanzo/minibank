@@ -2,7 +2,7 @@
 
 namespace MiniBank.CustomersSrv.Application.Dtos.Responses;
 
-public class CustomerResponse
+public class CustomerEntitiyResponse
 {
 
     [JsonPropertyName("id")]
@@ -18,7 +18,7 @@ public class CustomerResponse
     public DateTime BirthDate { get; set; }
 
     [JsonPropertyName("document")]
-    public DocumentDto Document { get; set; }
+    public DocumentEntityResponse Document { get; set; }
 
 }
 

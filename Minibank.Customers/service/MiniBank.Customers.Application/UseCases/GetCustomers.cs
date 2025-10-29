@@ -1,7 +1,11 @@
-﻿using MiniBank.CustomersSrv.Application.Dtos.Requests;
-using MiniBank.CustomersSrv.Domain.Repositories;
+﻿using Consul;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MiniBank.Customers.Application.Dtos.Requests;
+using MiniBank.CustomersSrv.Application.Dtos.Requests;
+using MiniBank.CustomersSrv.Application.Dtos.Responses;
+using MiniBank.CustomersSrv.Domain.Repositories;
+using MiniBank.Pagination;
 using MiniBank.ResultPattern;
 
 namespace MiniBank.CustomersSrv.Application.UseCases;
@@ -11,22 +15,38 @@ internal class GetCustomersUseCase
     ICustomerRepository customerRepository,
     ILogger<GetCustomersUseCase> logger
 
-) : IRequestHandler<CustomerIdRequest, string>
+) : IRequestHandler<CustomerFilterRequest, Result<PagedResult<CustomerEntitiyResponse>>>
 {
-    public async Task<string> Handle(CustomerIdRequest request, CancellationToken cancellationToken)
+    public async Task<Result<PagedResult<CustomerEntitiyResponse>>> 
+        Handle(CustomerFilterRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            var customer = await customerRepository.GetById(request.CustomerId, cancellationToken);
+            var customers = await customerRepository.Get(request.FirstName, cancellationToken);
 
-            if (customer == null) {
-                Result.Failure($"There is not a customer with id {request.CustomerId}");
-            }
+            var customersResponse = customers.Select(c => new CustomerEntitiyResponse
+            {
+                Id = c.EntityId,
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                BirthDate = c.BirthDate,
+                Document = new DocumentEntityResponse
+                {
+                    Type = c.Document.Type,
+                    DocumentId  = c.Document.DocumentId
+                }
+            }).ToList();
 
-            //aca debe ir el dto del customer
-            Result.Success(customer);
+            var pagedResult = new PagedResult<CustomerEntitiyResponse>
+            {
+                PageNumber = 1,
+                PageSize = customers.Count(),
+                TotalCount = customers.Count(),
+                TotalPages = 1,
+                Items = customersResponse
+            };
 
-            return customer.FirstName;
+            return Result.Success(pagedResult);
         }
         catch (Exception ex)
         {

@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace MiniBank.CustomersSrv.Application.Dtos.Requests;
 
-public record CreateCustomerAddressRequest : IRequest<Result<CustomerResponse>>
+public record CreateCustomerAddressRequest : IRequest<Result<CustomerEntitiyResponse>>
 {
     public Guid CustomerId { get; set; }
 

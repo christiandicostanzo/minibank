@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace MiniBank.CustomersSrv.Application.Dtos.Requests;
 
-public record CreateCustomerRequest : IRequest<Result<CustomerResponse>>
+public record CreateCustomerRequest : IRequest<Result<CustomerEntitiyResponse>>
 {
 
     [JsonPropertyName("first_name")]
@@ -18,6 +18,6 @@ public record CreateCustomerRequest : IRequest<Result<CustomerResponse>>
     public DateTime BirthDate { get; set; }
 
     [JsonPropertyName("document")]
-    public DocumentDto Document { get; set; }
+    public DocumentEntityResponse Document { get; set; }
 
 }

@@ -18,10 +18,10 @@ public class CreateCustomerAddressUseCase
     IValidator<CreateCustomerAddressRequest> CreateCustomerAddressRequestValidator,
     ILogger<CreateCustomerAddressUseCase> logger
 )
-: IRequestHandler<CreateCustomerAddressRequest, Result<CustomerResponse>>
+: IRequestHandler<CreateCustomerAddressRequest, Result<CustomerEntitiyResponse>>
 {
 
-    public async Task<Result<CustomerResponse>> Handle(CreateCustomerAddressRequest request, CancellationToken cancellationToken)
+    public async Task<Result<CustomerEntitiyResponse>> Handle(CreateCustomerAddressRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -48,7 +48,7 @@ public class CreateCustomerAddressUseCase
 
             var updateResult = await customerRepository.Update(customer, cancellationToken);
 
-            return Result.Success<CustomerResponse>(new CustomerResponse() { });
+            return Result.Success<CustomerEntitiyResponse>(new CustomerEntitiyResponse() { });
         }
         catch (Exception ex)
         {

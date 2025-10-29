@@ -2,7 +2,9 @@
 using MiniBank.CustomersSrv.Domain.Repositories;
 using MiniBank.Exceptions;
 using MiniBank.MongoDB;
+using MiniBank.Pagination;
 using MongoDB.Driver;
+using System.ComponentModel;
 
 namespace MiniBank.CustomersSrv.Infrastructure.Database;
 
@@ -46,6 +48,7 @@ public class CustomerRepository
     {
         try
         {
+
             var documentIdFilter = Builders<Customer>.Filter.Eq(C => C.Document.DocumentId, document.DocumentId);
             var documentType = Builders<Customer>.Filter.Eq(C => C.Document.Type, document.Type);
 
@@ -57,6 +60,22 @@ public class CustomerRepository
         catch (Exception ex)
         {
             throw new MinibankRepositoryException($"There is an error retrieving the customer by document. Document Id: {document?.DocumentId}", ex);
+        }
+    }
+
+    public async Task<List<Customer>> Get(string name, CancellationToken cancellationToken)
+    {
+        try
+        {
+
+            var filter = Builders<Customer>.Filter.StringIn(c => c.FirstName , name);
+            var customers = await customerDbContext.Collection.Find(filter).ToListAsync();
+
+            return customers;
+        }
+        catch (Exception ex)
+        {
+            throw new MinibankRepositoryException($"There is an error retrieving customers", ex);
         }
     }
 

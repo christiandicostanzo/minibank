@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace MiniBank.CustomersSrv.Application.Dtos.Requests;
 
-public record UpdateCustomerRequest : IRequest<Result<CustomerResponse>> 
+public record UpdateCustomerRequest : IRequest<Result<CustomerEntitiyResponse>> 
 {
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
@@ -20,6 +20,6 @@ public record UpdateCustomerRequest : IRequest<Result<CustomerResponse>>
     public DateTime BirthDate { get; set; }
 
     [JsonPropertyName("document")]
-    public DocumentDto Document { get; set; }
+    public DocumentEntityResponse Document { get; set; }
 
 }

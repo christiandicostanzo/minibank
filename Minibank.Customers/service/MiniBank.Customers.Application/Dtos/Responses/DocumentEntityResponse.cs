@@ -2,7 +2,7 @@
 
 namespace MiniBank.CustomersSrv.Application.Dtos.Responses;
 
-public class DocumentDto
+public class DocumentEntityResponse
 {
     [JsonPropertyName("document_id")]
     public int DocumentId { get; set; }
@@ -10,5 +10,3 @@ public class DocumentDto
     [JsonPropertyName("type")]
     public string Type { get; set; }
 }
-
-

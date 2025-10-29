@@ -53,6 +53,7 @@ try
     });
 
     var app = builder.Build();
+
     app.UsePathBase("/customers");
     app.MapHealthChecks("/healthz");
 
@@ -70,7 +71,7 @@ try
         });
     }
 
-    app.MapControllers();
+    //app.MapControllers();
     app.AddMiniBankEndpoints();
 
     app.UseMiddleware<MiniBank.Security.JwtAuthenticationMiddleware>();
@@ -86,7 +87,7 @@ catch (Exception ex)
 }
 
 [JsonSerializable(typeof(CreateCustomerRequest))]
-[JsonSerializable(typeof(CustomerResponse))]
+[JsonSerializable(typeof(CustomerEntitiyResponse))]
 [JsonSerializable(typeof(CreateCustomerAddressRequest))]
 [JsonSerializable(typeof(Customer))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext { }
