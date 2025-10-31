@@ -83,10 +83,10 @@ public class CustomerRepository
     {
         try
         {
-
             var replacementResult = await customerDbContext.Collection.ReplaceOneAsync<Customer>((c) =>
                                  c.EntityId == customer.EntityId, customer, cancellationToken: cancellationToken);
-            return true;
+            
+            return replacementResult.ModifiedCount > 0;
         }
         catch (Exception ex)
         {

@@ -1,13 +1,16 @@
-﻿using MediatR;
-using MiniBank.CustomersSrv.Application.Dtos.Requests;
-using MiniBank.CustomersSrv.Application.Dtos.Responses;
-using MiniBank.CustomersSrv.Domain.Repositories;
-using MiniBank.CustomersSrv.Application.Dtos.Validators;
-using MiniBank.ServiceRegistry;
-using FluentValidation;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using MiniBank;
+using MiniBank.Customers.Application.Dtos;
+using MiniBank.CustomersSrv.Application.Dtos.Requests;
+using MiniBank.CustomersSrv.Application.Dtos.Responses;
+using MiniBank.CustomersSrv.Application.Dtos.Validators;
+using MiniBank.CustomersSrv.Domain.Entities;
+using MiniBank.CustomersSrv.Domain.Repositories;
 using MiniBank.ResultPattern;
+using MiniBank.ServiceRegistry;
+using MongoDB.Driver;
 
 
 namespace MiniBank.CustomersSrv.Application.UseCases;
@@ -18,10 +21,10 @@ public class CreateCustomerAddressUseCase
     IValidator<CreateCustomerAddressRequest> CreateCustomerAddressRequestValidator,
     ILogger<CreateCustomerAddressUseCase> logger
 )
-: IRequestHandler<CreateCustomerAddressRequest, Result<CustomerEntitiyResponse>>
+: IRequestHandler<CreateCustomerAddressRequest, Result<AddressDto>>
 {
 
-    public async Task<Result<CustomerEntitiyResponse>> Handle(CreateCustomerAddressRequest request, CancellationToken cancellationToken)
+    public async Task<Result<AddressDto>> Handle(CreateCustomerAddressRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -43,12 +46,25 @@ public class CreateCustomerAddressUseCase
             {
                 State = request.State,
                 ZipCode = request.ZipCode,
-                StreetName = request.StreetName
+                StreetName = request.StreetName,
+                City= request.City, 
+                StreetNumber = request.StreetNumber
             };
+
+            customer.UpdatedDate = DateTime.UtcNow;
 
             var updateResult = await customerRepository.Update(customer, cancellationToken);
 
-            return Result.Success<CustomerEntitiyResponse>(new CustomerEntitiyResponse() { });
+            AddressDto addressDto = new()
+            {
+                State = customer.Address.State,
+                ZipCode = customer.Address.ZipCode,
+                StreetName = customer.Address.StreetName,
+                City = customer.Address.City,
+                StreetNumber = customer.Address.StreetNumber
+            };
+
+            return Result.Success<AddressDto>(addressDto);
         }
         catch (Exception ex)
         {

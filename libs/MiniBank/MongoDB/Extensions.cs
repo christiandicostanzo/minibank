@@ -6,6 +6,9 @@ namespace MiniBank.MongoDB.Extensions;
 public static class Extensions
 {
 
+    
+
+
     public static BsonClassMap<T> ConfigAuditableProperties<T>(this BsonClassMap<T> bsonClassMap) 
     {
         if (bsonClassMap.ClassType.BaseType == typeof(AuditableEntity))

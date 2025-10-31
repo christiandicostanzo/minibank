@@ -1,26 +1,11 @@
 ﻿using MediatR;
+using MiniBank.Customers.Application.Dtos;
 using MiniBank.CustomersSrv.Application.Dtos.Responses;
 using MiniBank.ResultPattern;
-using System.Text.Json.Serialization;
 
 namespace MiniBank.CustomersSrv.Application.Dtos.Requests;
 
-public record CreateCustomerAddressRequest : IRequest<Result<CustomerEntitiyResponse>>
+public record CreateCustomerAddressRequest : AddressDto, IRequest<Result<AddressDto>>
 {
     public Guid CustomerId { get; set; }
-
-    [JsonPropertyName("city")]
-    public string City { get; set; }
-
-    [JsonPropertyName("state")]
-    public string State { get; set; }
-
-    [JsonPropertyName("street_name")]
-    public string StreetName { get; set; }
-    [JsonPropertyName("street_number")]
-    public int StreetNumber { get; set; }
-
-    [JsonPropertyName("zip_code")]
-    public string ZipCode { get; set; }
-
 }

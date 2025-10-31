@@ -3,6 +3,7 @@ using System.Net;
 
 namespace MiniBank.MongoDB;
 
+//https://www.mongodb.com/docs/drivers/csharp/current/serialization/class-mapping/
 public abstract class BsonClassMapBuilder<T>
 {
     protected BsonClassMap<T> map = new BsonClassMap<T>();

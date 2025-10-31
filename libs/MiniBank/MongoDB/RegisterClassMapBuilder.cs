@@ -1,4 +1,7 @@
-﻿using MongoDB.Bson.Serialization;
+﻿using MiniBank.Domain;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using System.Reflection;
 
 namespace MiniBank.MongoDB;
@@ -6,9 +9,14 @@ namespace MiniBank.MongoDB;
 public class RegisterClassMapBuilder
 {
 
-    public static void Register(Assembly assembly)
+    private static bool registered = false;
+
+    public static void RegisterMapClasses(Assembly assembly)
     {
         ArgumentNullException.ThrowIfNull(assembly, nameof(assembly));
+
+        if(registered)
+            throw new RegisterClassMapException("BsonClassMapBuilder already registered.");
 
         var baseTypeDefinition = typeof(BsonClassMapBuilder<>);
 
@@ -34,8 +42,6 @@ public class RegisterClassMapBuilder
                 continue;
             }
 
-            var bsonMapClass = methodInfo.Invoke(instance, null);
-
             try
             {
                 methodInfo.Invoke(instance, null);
@@ -46,6 +52,8 @@ public class RegisterClassMapBuilder
                 {
                     BsonClassMap.RegisterClassMap(mapClass);
                 }
+
+                registered = true;
             }
             catch (TargetInvocationException ex)
             {
@@ -59,4 +67,15 @@ public class RegisterClassMapBuilder
 
     }
 
+    public static void RegisterDomainBaseTypes()
+    {
+
+        BsonClassMap.RegisterClassMap<EntityBase>()
+                  .MapField(e => e.EntityId)
+                  .SetElementName("entity_id").SetSerializer(new GuidSerializer(GuidRepresentation.Standard));
+
+        var auditableEntityClassMap = BsonClassMap.RegisterClassMap<AuditableEntity>();
+        auditableEntityClassMap.MapProperty(a => a.CreatedDate).SetElementName("created_date");
+        auditableEntityClassMap.MapProperty(a => a.UpdatedDate).SetElementName("updated_date");
+    }
 }

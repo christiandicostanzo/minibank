@@ -10,6 +10,6 @@ public class UnitTest1
     {
 
         var assembly = Assembly.GetAssembly(typeof(MiniBank.CustomersSrv.Infrastructure.Database.CustomerRepository));
-        MiniBank.MongoDB.RegisterClassMapBuilder.Register(assembly);
+        MiniBank.MongoDB.RegisterClassMapBuilder.RegisterMapClasses(assembly);
     }
 }

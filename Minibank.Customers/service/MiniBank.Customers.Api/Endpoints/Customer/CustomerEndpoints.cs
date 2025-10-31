@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using MiniBank.CustomersSrv.Application.Dtos.Requests;
 using MiniBank.CustomersSrv.Application.Dtos.Responses;
 using MiniBank.ResultPattern;
@@ -18,13 +19,22 @@ public static class CustomerEndpoints
 
         customerApi
             .MapGet("/{customerId}", GetCustomerById)
-            .WithName("GetCustomerById 1")
+            .WithName("GetCustomerById")
             .WithSummary("Es el endpoint que permite obtener los customer por ID")
             .Produces<CustomerEntitiyResponse>(201);
 
-        customerApi.MapPost("/", CreateCustomer);
-        customerApi.MapPost("/{customerId}", UpdateCustomer);
-        customerApi.MapPost("/{customerId}/addresses", CreateCustomerAddress);
+        customerApi.MapPost("/", CreateCustomer)
+            .WithName("Create Customers ")
+            .WithSummary("Allows to create a new customer");
+
+        customerApi.MapPost("/{customerId}", UpdateCustomer)
+            .WithName("Update Customer")
+            .WithSummary("Allows to update only customer's fields");
+
+
+        customerApi.MapPost("/{customerId}/addresses", CreateCustomerAddress)
+            .WithName("Create Customer Address")
+            .WithSummary("Allows to add or update a customer's address");
 
         return app;
 
@@ -44,11 +54,11 @@ public static class CustomerEndpoints
             return TypedResults.BadRequest(result.Error);
         }
 
-        return TypedResults.Ok(result.Payload);  
+        return TypedResults.Ok(result.Payload);
     }
 
     public static async Task<IResult> CreateCustomerAddress(
-        Guid customerId,
+        [FromRoute] Guid customerId,
         CreateCustomerAddressRequest createCustomerRequest,
         IMediator mediator,
         CancellationToken cancellationToken)
@@ -59,7 +69,7 @@ public static class CustomerEndpoints
         var result = await mediator.Send(createCustomerRequest, cancellationToken);
 
         if (result.IsError)
-        { 
+        {
             return TypedResults.BadRequest(result.Error);
         }
 
@@ -67,7 +77,7 @@ public static class CustomerEndpoints
     }
 
     public static async Task<IResult> UpdateCustomer(
-        Guid customerId,
+        [FromRoute] Guid customerId,
         UpdateCustomerRequest updateCustomerRequest,
         IMediator mediator,
         CancellationToken cancellation)
@@ -77,7 +87,7 @@ public static class CustomerEndpoints
 
         var result = await mediator.Send(updateCustomerRequest, cancellation);
 
-        if(result.IsError)
+        if (result.IsError)
         {
             return TypedResults.NotFound(result.Error);
         }

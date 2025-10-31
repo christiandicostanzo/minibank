@@ -41,7 +41,8 @@ public static class ServiceExtensions
     static void RegisterMongoDBClassMaps(this IServiceCollection services)
     {
         var assembly = Assembly.GetAssembly(typeof(CustomerRepository));
-        MiniBank.MongoDB.RegisterClassMapBuilder.Register(assembly);
+        RegisterClassMapBuilder.RegisterMapClasses(assembly);
+        RegisterClassMapBuilder.RegisterDomainBaseTypes();
     }
 
     static void RegisterMongoDBClient(this IServiceCollection services)

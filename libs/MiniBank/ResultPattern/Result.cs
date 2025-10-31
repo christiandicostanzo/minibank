@@ -6,10 +6,9 @@
         Error _error;
         string _message;
 
-        public bool IsSuccess => _error != null;
-        public bool IsError => _error == null;
+        public bool IsSuccess => _error == null;
+        public bool IsError => _error != null;
         public string Message => _message;
-
 
         public ResultBase()
         {
@@ -85,7 +84,7 @@
         }
 
     }
-
+        
     public class Error
     {
         public int? Code { get; private set; }
