@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MiniBank;
@@ -42,7 +43,7 @@ public class CreateCustomerAddressUseCase
                 Result.Failure("Customer not found");
             }
 
-            customer.Address = new Domain.Entities.Address()
+            customer.Address = new Address()
             {
                 State = request.State,
                 ZipCode = request.ZipCode,
@@ -55,16 +56,7 @@ public class CreateCustomerAddressUseCase
 
             var updateResult = await customerRepository.Update(customer, cancellationToken);
 
-            AddressDto addressDto = new()
-            {
-                State = customer.Address.State,
-                ZipCode = customer.Address.ZipCode,
-                StreetName = customer.Address.StreetName,
-                City = customer.Address.City,
-                StreetNumber = customer.Address.StreetNumber
-            };
-
-            return Result.Success<AddressDto>(addressDto);
+            return Result.Success<AddressDto>(customer.Address.Adapt<AddressDto>());
         }
         catch (Exception ex)
         {

@@ -1,10 +1,13 @@
-﻿using MiniBank.CustomersSrv.Application.Dtos.Responses;
+﻿using MiniBank.Customers.Application.Dtos;
 using System.Text.Json.Serialization;
 
 namespace MiniBank.CustomersSrv.Application.Dtos;
 
 public record CustomerDto 
 {
+
+    [JsonPropertyName("id")]
+    public Guid EntityId { get; set; }
 
     [JsonPropertyName("first_name")]
     public string FirstName { get; set; }
@@ -16,5 +19,8 @@ public record CustomerDto
     public DateTime BirthDate { get; set; }
 
     [JsonPropertyName("document")]
-    public DocumentEntityResponse Document { get; set; }
+    public DocumentDto Document { get; set; }
+
+    [JsonPropertyName("address")]
+    public AddressDto Address { get; set; }
 }

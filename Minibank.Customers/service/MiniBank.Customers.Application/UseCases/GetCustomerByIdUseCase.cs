@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using Mapster;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using MiniBank.CustomersSrv.Application.Dtos;
 using MiniBank.CustomersSrv.Application.Dtos.Requests;
 using MiniBank.CustomersSrv.Application.Dtos.Responses;
 using MiniBank.CustomersSrv.Domain.Repositories;
@@ -11,9 +13,9 @@ internal class GetCustomerByIdUseCase
 (
     ICustomerRepository customerRepository,
     ILogger<GetCustomerByIdUseCase> logger
-) : IRequestHandler<CustomerIdRequest, Result<CustomerEntitiyResponse>>
+) : IRequestHandler<CustomerIdRequest, Result<CustomerDto>>
 {
-    public async Task<Result<CustomerEntitiyResponse>> Handle(CustomerIdRequest request, CancellationToken cancellationToken)
+    public async Task<Result<CustomerDto>> Handle(CustomerIdRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -23,15 +25,8 @@ internal class GetCustomerByIdUseCase
             {
                 return Result.Failure($"Customer with Id {request.CustomerId} not found.");
             }
-
-            var createCustomerResponse = new CustomerEntitiyResponse()
-            {
-                Id = customer.EntityId,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName
-            };
             
-            return Result.Success(createCustomerResponse);
+            return Result.Success(customer.Adapt<CustomerDto>());
         }
         catch (Exception ex)
         {

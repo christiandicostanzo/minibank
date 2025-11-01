@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MiniBank.Cache;
+using MiniBank.CustomersSrv.Application.Dtos;
 using MiniBank.CustomersSrv.Application.Dtos.Requests;
 using MiniBank.CustomersSrv.Application.Dtos.Responses;
 using MiniBank.CustomersSrv.Domain.Entities;
@@ -20,10 +22,10 @@ public class CreateCustomerUseCase
     ILogger<CreateCustomerUseCase> logger,
     IServiceRegistry serviceRegistry
 )
-: IRequestHandler<CreateCustomerRequest, Result<CustomerEntitiyResponse>>
+: IRequestHandler<CreateCustomerRequest, Result<CustomerDto>>
 {
 
-    public async Task<Result<CustomerEntitiyResponse>> Handle(CreateCustomerRequest request, CancellationToken cancellationToken)
+    public async Task<Result<CustomerDto>> Handle(CreateCustomerRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -63,14 +65,7 @@ public class CreateCustomerUseCase
 
             await customerRepository.Save(customer, cancellationToken);
 
-            var createCustomerResponse = new CustomerEntitiyResponse()
-            {
-                Id = customer.EntityId,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName
-            };
-
-            return Result.Success(createCustomerResponse);
+            return Result.Success(customer.Adapt<CustomerDto>());
 
         }
         catch (Exception ex)

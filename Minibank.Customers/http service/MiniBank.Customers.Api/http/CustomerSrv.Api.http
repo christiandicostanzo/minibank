@@ -1,0 +1,52 @@
+@HostAddress = http://localhost:5049
+
+### Create a new customer
+POST {{HostAddress}}/customers
+Content-Type: application/json
+{
+  "first_name": "Jon",
+  "last_name": "Doe",
+  "birth_date": "2012-05-02T23:27:42.859Z",
+  "document": {
+    "document_id": 11223333,
+    "type": "DNI"
+  }
+}
+
+###
+
+### Get customer by ID
+# Replace {customerId} with an actual GUID after creating a customer
+GET {{HostAddress}}/customers/{customerId}
+
+###
+
+### Update customer
+# Replace {customerId} with an actual GUID and update the body as needed
+POST {{HostAddress}}/customers/{customerId}
+Content-Type: application/json
+
+{
+  "first_name": "UpdatedName",
+  "last_name": "UpdatedLastName",
+  "document": {
+    "document_id": 12345678,
+    "type": "DNI"
+  }
+}
+
+###
+
+### Create customer address
+# Replace {customerId} with an actual GUID and update the body as needed
+POST {{HostAddress}}/customers/{customerId}/addresses
+Content-Type: application/json
+
+{
+  "street": "123 Main St",
+  "city": "Sample City",
+  "state": "Sample State",
+  "zip_code": "12345"
+}
+
+###

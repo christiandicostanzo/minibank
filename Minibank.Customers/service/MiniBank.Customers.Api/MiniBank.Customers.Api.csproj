@@ -32,8 +32,4 @@
 		<ProjectReference Include="..\MiniBank.Customers.Application\MiniBank.Customers.Application.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Include="http\http-client.env.json" />
-	</ItemGroup>
-
 </Project>

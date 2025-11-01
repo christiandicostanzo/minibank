@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace MiniBank.CustomersSrv.Application.Dtos.Requests;
 
-public record CreateCustomerRequest : CustomerDto, IRequest<Result<CustomerEntitiyResponse>>
+public record CreateCustomerRequest : CustomerDto, IRequest<Result<CustomerDto>>
 {
 
 }
