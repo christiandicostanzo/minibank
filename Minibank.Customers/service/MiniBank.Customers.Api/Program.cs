@@ -1,18 +1,9 @@
-using Elastic.Serilog.Sinks;
-using Elastic.Channels;
-using Elastic.Transport;
 using MiniBank.CustomersSrv.Api.Endpoints;
 using MiniBank.CustomersSrv.Application.DependencyInjection;
-using MiniBank.CustomersSrv.Application.Dtos.Requests;
-using MiniBank.CustomersSrv.Application.Dtos.Responses;
-using MiniBank.CustomersSrv.Domain.Entities;
 using MiniBank.Exceptions;
 using MiniBank.ServiceRegistry;
 using Serilog;
-using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
-using Elastic.Ingest.Elasticsearch;
-using Elastic.Ingest.Elasticsearch.DataStreams;
 
 try
 {
@@ -27,29 +18,18 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddOpenApiDocument(config =>
     {
-        config.DocumentName = "MiniBankAPI";
-        config.Title = "MiniBankAPI v1";
-        config.Version = "v1";
+        config.DocumentName = "MiniBankAPI - Customers Api";
+        config.Title = "MiniBankAPI - Customers Api";
     });
 
     builder.Services.AddHealthChecks();
-    builder.Services.RegisterConsulServiceDiscoveryProvider("customer-srv", "Customer Service");
-    builder.Services.AddControllers();
+    //builder.Services.RegisterConsulServiceDiscoveryProvider("customer-srv", "Customer Service");
     builder.Services.RegisterApplicationDependencies();
 
     builder.Services.AddSerilog((services, lc) =>
     {
         lc.ReadFrom.Configuration(builder.Configuration);
         lc.Enrich.FromLogContext();
-
-        //lc.WriteTo.Elasticsearch(new[] { new Uri("http://localhost:9200") }, opts =>
-        //{
-        //    opts.DataStream = new DataStreamName("logs", "customer-service", "demo");
-        //    opts.BootstrapMethod = BootstrapMethod.Failure;
-        //}, transport =>
-        //{
-        //    transport.Authentication(new BasicAuthentication("elastic", "elastic1234")); 
-        //});
     });
 
     var app = builder.Build();
@@ -71,13 +51,9 @@ try
         });
     }
 
-    //app.MapControllers();
     app.AddMiniBankEndpoints();
-
-    app.UseMiddleware<MiniBank.Security.JwtAuthenticationMiddleware>();
-
+    //app.UseMiddleware<MiniBank.Security.JwtAuthenticationMiddleware>();
     app.UseMinibankCustomExceptionHandler();
-
     app.Run();
 
 }
@@ -86,8 +62,3 @@ catch (Exception ex)
     throw;
 }
 
-//[JsonSerializable(typeof(CreateCustomerRequest))]
-//[JsonSerializable(typeof(CustomerEntitiyResponse))]
-//[JsonSerializable(typeof(CreateCustomerAddressRequest))]
-//[JsonSerializable(typeof(Customer))]
-//internal partial class AppJsonSerializerContext : JsonSerializerContext { }

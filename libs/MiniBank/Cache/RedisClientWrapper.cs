@@ -11,7 +11,7 @@ public class RedisClientWrapper : IRedisClientWrapper
     public RedisClientWrapper()
     {
         _redisClient = ConnectionMultiplexer.Connect("localhost");
-        _database = _redisClient.GetDatabase(1);
+        _database = _redisClient.GetDatabase(0);
     }
 
     public StackExchange.Redis.IDatabase Database

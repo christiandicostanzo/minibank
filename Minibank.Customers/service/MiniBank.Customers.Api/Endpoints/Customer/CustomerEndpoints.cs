@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MiniBank.Customers.Application.Dtos.Requests;
 using MiniBank.CustomersSrv.Application.Dtos.Requests;
 using MiniBank.CustomersSrv.Application.Dtos.Responses;
 using MiniBank.ResultPattern;
@@ -21,6 +22,12 @@ public static class CustomerEndpoints
             .MapGet("/{customerId}", GetCustomerById)
             .WithName("GetCustomerById")
             .WithSummary("Es el endpoint que permite obtener los customer por ID")
+            .Produces<CustomerEntitiyResponse>(201);
+
+        customerApi
+            .MapGet("/", GetCustomers)
+            .WithName("GetCustomers")
+            .WithSummary("Allows search customers using filters")
             .Produces<CustomerEntitiyResponse>(201);
 
         customerApi.MapPost("/", CreateCustomer)
@@ -108,6 +115,24 @@ public static class CustomerEndpoints
         };
 
         var result = await mediator.Send(customerIdRequest, cancellation);
+
+        if (result.IsError)
+        {
+            return TypedResults.NotFound(result.Error);
+        }
+
+        return TypedResults.Ok(result.Payload);
+    }
+
+    public static async Task<Results<Ok<string>, IResult>> GetCustomers(
+      [FromQuery]  string first_name ,
+      IMediator mediator,
+      CancellationToken cancellation)
+    {
+        CustomerFilterRequest customerFilterRequest = new();
+        customerFilterRequest.FirstName = first_name;
+
+        var result = await mediator.Send(customerFilterRequest, cancellation);
 
         if (result.IsError)
         {

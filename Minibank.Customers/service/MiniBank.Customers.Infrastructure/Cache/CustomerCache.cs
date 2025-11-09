@@ -1,9 +1,7 @@
 ﻿using MiniBank.Cache;
 using MiniBank.CustomersSrv.Domain.Entities;
+using NRedisStack.RedisStackCommands;
 using StackExchange.Redis;
-using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
-
 namespace MiniBank.CustomersSrv.Infrastructure.Cache;
 
 public class CustomersCache
@@ -13,34 +11,24 @@ IRedisClientWrapper redisClientWrapper
 : IMinibankEntityCache<Customer>
 {
 
-    const string CUSTOMER_LIST_KEY = "CUSTOMER_LIST";
-
-    public bool SaveList(IList<Customer> customers)
+    public bool SaveList(string cacheKey, IList<Customer> customers)
     {
-        JsonSerializerOptions options = new JsonSerializerOptions();
-        options.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
-
-        var customersJson = JsonSerializer.Serialize(customers, options);
-        RedisKey redisKey = new(CUSTOMER_LIST_KEY);
-        RedisValue redisValue = new(customersJson);
-        return redisClientWrapper.Database.StringSet(redisKey, redisValue);
+        RedisKey redisKey = new(cacheKey);
+        RedisValue redisValue = new RedisValue("$") ;
+        return redisClientWrapper.Database.JSON().Set(redisKey, redisValue, customers);
     }
 
-    public List<Customer> GetList()
+    public List<Customer> GetList(string cacheKey)
     {
-        RedisKey redisKey = new(CUSTOMER_LIST_KEY);
-        RedisValue redisValue = redisClientWrapper.Database.StringGet(redisKey);
-        List<Customer> cachedCustomers = new();
+        RedisKey redisKey = new(cacheKey);
+        RedisValue redisValue = RedisValue.Null;
+        return redisClientWrapper.Database.JSON().Get<List<Customer>>(redisKey);
+    }
 
-        JsonSerializerOptions options = new JsonSerializerOptions();
-        options.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
-
-        if (redisValue.HasValue)
-        {
-            //cachedCustomers = JsonSerializer.Deserialize<List<Customer>>(redisValue, options);
-        }
-
-        return cachedCustomers;
+    public bool Invalidate(string cacheKey)
+    {
+        RedisKey redisKey = new(cacheKey);
+        return redisClientWrapper.Database.JSON().Del(redisKey) > 0;
     }
 
 }

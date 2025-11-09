@@ -3,6 +3,7 @@ using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MiniBank.Cache;
+using MiniBank.Customers.Application;
 using MiniBank.CustomersSrv.Application.Dtos;
 using MiniBank.CustomersSrv.Application.Dtos.Requests;
 using MiniBank.CustomersSrv.Application.Dtos.Responses;
@@ -19,8 +20,7 @@ public class CreateCustomerUseCase
     ICustomerRepository customerRepository,
     IMinibankEntityCache<Customer> customersCache,
     IValidator<CreateCustomerRequest> requestValidator,
-    ILogger<CreateCustomerUseCase> logger,
-    IServiceRegistry serviceRegistry
+    ILogger<CreateCustomerUseCase> logger
 )
 : IRequestHandler<CreateCustomerRequest, Result<CustomerDto>>
 {
@@ -39,7 +39,6 @@ public class CreateCustomerUseCase
                 return Result.Failure(validationResult.Errors.First().ErrorMessage);
             }
 
-            //Traer el customer desde la base de datos por el documentid
             Document document = new Document()
             {
                 DocumentId = request.Document.DocumentId,
@@ -64,6 +63,7 @@ public class CreateCustomerUseCase
             logger.LogInformation("Saving a new Customer in the database");
 
             await customerRepository.Save(customer, cancellationToken);
+            customersCache.Invalidate(CacheKeys.CUSTOMER_LIST);
 
             return Result.Success(customer.Adapt<CustomerDto>());
 

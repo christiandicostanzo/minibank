@@ -1,5 +1,0 @@
-﻿@MiniBank.Customers.Api_HostAddress = http://localhost:5049
-
-POST {{MiniBank.Customers.Api_HostAddress}}/customers
-
-###

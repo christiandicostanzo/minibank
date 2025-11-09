@@ -6,6 +6,7 @@ using MiniBank.ResultPattern;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace MiniBank.Customers.Application.Dtos.Requests;
 
@@ -17,6 +18,11 @@ public class PagedRequest
 
 public class CustomerFilterRequest : PagedRequest, IRequest<Result<PagedResult<CustomerDto>>>
 {
+    [JsonPropertyName("first_name")]
     public string? FirstName { get; set; }
 
+    [JsonPropertyName("document_id")]
+    public int DocumentId { get; set; }
+    [JsonPropertyName("document_type")]
+    public int DocumentType { get; set; }
 }

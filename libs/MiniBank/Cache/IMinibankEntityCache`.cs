@@ -2,6 +2,7 @@
 
 public interface IMinibankEntityCache<T>
 {
-    bool SaveList(IList<T> entities);
-    List<T> GetList();
+    List<T> GetList(string cacheKey);
+    bool SaveList(string cacheKey, IList<T> entities);
+    bool Invalidate(string cacheKey);
 }

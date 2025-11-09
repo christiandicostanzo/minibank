@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using MiniBank.Cache;
+using MiniBank.CustomersSrv.Application.Dtos;
 using MiniBank.CustomersSrv.Application.Dtos.Requests;
 using MiniBank.CustomersSrv.Domain.Entities;
 using MiniBank.CustomersSrv.Domain.Repositories;
@@ -64,8 +65,6 @@ public static class ServiceExtensions
     {
         services.AddSingleton<IRedisClientWrapper, RedisClientWrapper>();
         services.AddScoped<IMinibankEntityCache<Customer>, CustomersCache>();
-        //services.AddScoped<IAbstractCache<object>, ConcretCache<object>>();
-
     }
 
     static void RegisterValidators(this IServiceCollection services)

@@ -2,16 +2,11 @@
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using MiniBank;
 using MiniBank.Customers.Application.Dtos;
 using MiniBank.CustomersSrv.Application.Dtos.Requests;
-using MiniBank.CustomersSrv.Application.Dtos.Responses;
-using MiniBank.CustomersSrv.Application.Dtos.Validators;
 using MiniBank.CustomersSrv.Domain.Entities;
 using MiniBank.CustomersSrv.Domain.Repositories;
 using MiniBank.ResultPattern;
-using MiniBank.ServiceRegistry;
-using MongoDB.Driver;
 
 
 namespace MiniBank.CustomersSrv.Application.UseCases;

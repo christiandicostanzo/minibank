@@ -92,9 +92,3 @@ catch (Exception ex)
 {
     throw;
 }
-
-//[JsonSerializable(typeof(CreateCustomerRequest))]
-//[JsonSerializable(typeof(CustomerResponse))]
-//[JsonSerializable(typeof(CreateCustomerAddressRequest))]
-//[JsonSerializable(typeof(Customer))]
-//internal partial class AppJsonSerializerContext : JsonSerializerContext { }
