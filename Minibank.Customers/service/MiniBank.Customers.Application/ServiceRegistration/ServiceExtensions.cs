@@ -8,6 +8,7 @@ using MiniBank.CustomersSrv.Domain.Repositories;
 using MiniBank.CustomersSrv.Infrastructure.Cache;
 using MiniBank.CustomersSrv.Infrastructure.Database;
 using MiniBank.MongoDB;
+using MiniBank.Specification;
 using System.Reflection;
 
 
@@ -26,6 +27,8 @@ public static class ServiceExtensions
         services.RegisterRedisCacheClient();
     }
 
+
+
     static void RegisterMediatRInternal(this IServiceCollection services)
     {
         services.AddMediatR(config =>
@@ -36,6 +39,7 @@ public static class ServiceExtensions
 
     static void RegisterRepositories(this IServiceCollection services)
     {
+        services.AddScoped<Specification<Customer>, MongoDbSpecification<Customer>>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
     }
 
@@ -50,12 +54,14 @@ public static class ServiceExtensions
     {
         services.AddSingleton<IMongoClientWrapper, MongoClientWrapper>();
 
-        services.AddScoped<IMongoDbDatabaseContext<Customer>, MongoEntityDbContext<Customer>>((provider) => {
+        services.AddScoped<IMongoDbDatabaseContext<Customer>, MongoEntityDbContext<Customer>>((provider) =>
+        {
             var instance = provider.GetService<IMongoClientWrapper>();
             return new MongoEntityDbContext<Customer>(instance) { DatabaseName = "customer-srv", CollectionName = "customers" };
         });
 
-        services.AddScoped<IMongoDbDatabaseContext<Address>, MongoEntityDbContext<Address>>((provider) => {
+        services.AddScoped<IMongoDbDatabaseContext<Address>, MongoEntityDbContext<Address>>((provider) =>
+        {
             var instance = provider.GetService<IMongoClientWrapper>();
             return new MongoEntityDbContext<Address>(instance) { DatabaseName = "customer-srv", CollectionName = "address" };
         });

@@ -1,7 +1,8 @@
-﻿using MiniBank.CustomersSrv.Domain.Entities;
+﻿using MiniBank.Customers.Infrastructure;
+using MiniBank.CustomersSrv.Domain.Entities;
 using MiniBank.CustomersSrv.Domain.Repositories;
-using MiniBank.Exceptions;
 using MiniBank.MongoDB;
+using MiniBank.Specification;
 using MongoDB.Driver;
 
 namespace MiniBank.CustomersSrv.Infrastructure.Database;
@@ -28,10 +29,10 @@ public class CustomerRepository
         return await customerDbContext.Collection.Find(filter).FirstOrDefaultAsync();
     }
 
-    public async Task<List<Customer>> Get(string name, CancellationToken cancellationToken)
+    public async Task<List<Customer>> Get(Specification<Customer> specification, CancellationToken cancellationToken)
     {
-        var filter = Builders<Customer>.Filter.StringIn(c => c.FirstName, name);
-        return await customerDbContext.Collection.Find(filter).ToListAsync();
+        FilterDefinition<Customer> filterDefinition = specification.GetMongoDbFilter<Customer>();
+        return await customerDbContext.Collection.Find(filterDefinition).ToListAsync();
     }
 
     public async Task Save(Customer customer, CancellationToken cancellationToken)
