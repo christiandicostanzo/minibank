@@ -36,7 +36,7 @@ public class MongoDbSpecification<T>
     { 
         get => Expression;
     }
-
+    
     //System.Linq.Expressions.Expression<Func<Customer, bool>> documentIdExpression = (cust) => cust.Document.DocumentId == document.DocumentId;
     //System.Linq.Expressions.Expression<Func<Customer, bool>> docuemtnTypeExpression = (cust) => cust.Document.Type == document.Type;
 
@@ -45,24 +45,24 @@ public class MongoDbSpecification<T>
         return this;
     }
 
-    //public MongoDbSpecification<T>  And<TField>(Expression<Func<T, TField>> expression, TField value)
-    //{
-    //    var _right = Builders<T>.Filter.Eq(expression, value);
-    //    _filterDefinition = Builders<T>.Filter.And(_filterDefinition, _right);
-    //    return this;
-    //}
+    public MongoDbSpecification<T> And<TField>(Expression<Func<T, TField>> expression, TField value)
+    {
+        var _right = Builders<T>.Filter.Eq(expression, value);
+        _filterDefinition = Builders<T>.Filter.And(_filterDefinition, _right);
+        return this;
+    }
 
-    //public MongoDbSpecification<T> Or<TField>(Expression<Func<T, TField>> expression, TField value)
-    //{
-    //    var _right = Builders<T>.Filter.Eq(expression, value);
-    //    _filterDefinition = Builders<T>.Filter.Or(_filterDefinition, _right);
-    //    return this;
-    //}
+    public MongoDbSpecification<T> Or<TField>(Expression<Func<T, TField>> expression, TField value)
+    {
+        var _right = Builders<T>.Filter.Eq(expression, value);
+        _filterDefinition = Builders<T>.Filter.Or(_filterDefinition, _right);
+        return this;
+    }
 
-    //public MongoDbSpecification<T> Eq<TField>(Expression<Func<T, TField>> expression, TField value)
-    //{
-    //    _filterDefinition = Builders<T>.Filter.Eq(expression, value);
-    //    return this;
-    //}
+    public MongoDbSpecification<T> Eq<TField>(Expression<Func<T, TField>> expression, TField value)
+    {
+        _filterDefinition = Builders<T>.Filter.Eq(expression, value);
+        return this;
+    }
 
 }

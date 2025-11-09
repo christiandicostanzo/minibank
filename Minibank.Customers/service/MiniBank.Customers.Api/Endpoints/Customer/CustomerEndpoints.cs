@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MiniBank.Customers.Application.Dtos;
 using MiniBank.Customers.Application.Dtos.Requests;
+using MiniBank.CustomersSrv.Application.Dtos;
 using MiniBank.CustomersSrv.Application.Dtos.Requests;
 using MiniBank.CustomersSrv.Application.Dtos.Responses;
 using MiniBank.ResultPattern;
@@ -16,32 +18,34 @@ public static class CustomerEndpoints
         var customerApi = app.MapGroup("/customers");
 
         customerApi
-            .WithDisplayName("Customer Api");
+            .WithDisplayName("Minibank - Customer Api");
 
         customerApi
             .MapGet("/{customerId}", GetCustomerById)
             .WithName("GetCustomerById")
             .WithSummary("Es el endpoint que permite obtener los customer por ID")
-            .Produces<CustomerEntitiyResponse>(201);
+            .Produces<CustomerDto>(200);
 
         customerApi
             .MapGet("/", GetCustomers)
             .WithName("GetCustomers")
             .WithSummary("Allows search customers using filters")
-            .Produces<CustomerEntitiyResponse>(201);
+            .Produces<List<CustomerDto>>(200);
 
         customerApi.MapPost("/", CreateCustomer)
             .WithName("Create Customers ")
-            .WithSummary("Allows to create a new customer");
+            .WithSummary("Allows to create a new customer")
+            .Produces<CustomerDto>(201);
 
         customerApi.MapPost("/{customerId}", UpdateCustomer)
             .WithName("Update Customer")
-            .WithSummary("Allows to update only customer's fields");
-
+            .WithSummary("Allows to update only customer's fields")
+            .Produces<CustomerDto>(200);
 
         customerApi.MapPost("/{customerId}/addresses", CreateCustomerAddress)
             .WithName("Create Customer Address")
-            .WithSummary("Allows to add or update a customer's address");
+            .WithSummary("Allows to add or update a customer's address")
+            .Produces<AddressDto>(201);
 
         return app;
 
@@ -125,12 +129,12 @@ public static class CustomerEndpoints
     }
 
     public static async Task<Results<Ok<string>, IResult>> GetCustomers(
-      [FromQuery]  string first_name ,
+      [AsParameters] CustomerFilterRequest customerFilterRequest,
       IMediator mediator,
       CancellationToken cancellation)
     {
-        CustomerFilterRequest customerFilterRequest = new();
-        customerFilterRequest.FirstName = first_name;
+        //CustomerFilterRequest customerFilterRequest = new();
+        //customerFilterRequest.FirstName = first_name;
 
         var result = await mediator.Send(customerFilterRequest, cancellation);
 
