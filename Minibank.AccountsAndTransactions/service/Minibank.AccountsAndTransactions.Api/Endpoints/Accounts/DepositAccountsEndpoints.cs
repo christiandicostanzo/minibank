@@ -3,20 +3,21 @@ using MiniBank.ResultPattern;
 
 namespace MiniBank.AccountsAndTransactions.Api.Endpoints;
 
-public static class CustomerEndpoints
+public static class DepositAccountEndpoints
 {
     public static WebApplication AddAccountsEndpoints(this WebApplication app)
     {
 
-        var accountsApi = app.MapGroup("/accounts");
+        var accountsApi = app.MapGroup("/deposit_accounts");
 
         accountsApi
             .WithDisplayName("Accocunts and Transactions Api");
 
         accountsApi
-            .MapGet("/{accountId}", GetAccountById)
-            .WithName("GetAccountById")
-            .WithSummary("Retrieve an account by Id");
+            .MapPost("/", CreateDepositAccount)
+            .WithName("CreateDepositAccount")
+            .WithSummary("Creates a new DepositAccount associated to a customer")
+            .Produces<int>(201);
 
         accountsApi.MapPost("/", GetAccountById);
 
@@ -25,7 +26,7 @@ public static class CustomerEndpoints
     }
 
 
-    public static async Task<Results<Ok<string>, IResult>> GetAccountById(
+    public static async Task<Results<Ok<string>, IResult>> CreateDepositAccount(
         Guid accountId,
         CancellationToken cancellation)
     {

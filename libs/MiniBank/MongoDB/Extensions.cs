@@ -5,10 +5,6 @@ namespace MiniBank.MongoDB.Extensions;
 
 public static class Extensions
 {
-
-    
-
-
     public static BsonClassMap<T> ConfigAuditableProperties<T>(this BsonClassMap<T> bsonClassMap) 
     {
         if (bsonClassMap.ClassType.BaseType == typeof(AuditableEntity))
@@ -17,6 +13,6 @@ public static class Extensions
             bsonClassMap.MapProperty("UpdatedDate").SetElementName("updated_date");
         }
         return bsonClassMap;
-    }
+    } 
 
 }

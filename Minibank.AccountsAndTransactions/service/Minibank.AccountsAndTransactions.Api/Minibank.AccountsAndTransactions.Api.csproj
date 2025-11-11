@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Elastic.Serilog.Sinks" Version="9.0.0" />
 		<PackageReference Include="Microsoft.OpenApi" Version="2.3.5" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
 		<PackageReference Include="NSwag.AspNetCore" Version="14.6.1" />

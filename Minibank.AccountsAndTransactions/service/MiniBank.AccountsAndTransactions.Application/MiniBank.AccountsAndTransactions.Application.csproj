@@ -12,4 +12,9 @@
     <ProjectReference Include="..\MiniBank.AccountsAndTransactions.Infrastructure\MiniBank.AccountsAndTransactions.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dtos\Responses\" />
+    <Folder Include="Dtos\Requests\" />
+  </ItemGroup>
+
 </Project>
