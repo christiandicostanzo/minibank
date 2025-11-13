@@ -15,7 +15,7 @@ public class MinibankDbContext : DbContext
             options.ConfigureDataSource((dsBuilder) =>
             {
                 dsBuilder.ConnectionStringBuilder.Username = "admin";
-                dsBuilder.ConnectionStringBuilder.Password = "admin";
+                dsBuilder.ConnectionStringBuilder.Password = "admin1234";
                 dsBuilder.ConnectionStringBuilder.Host = "localhost";
                 dsBuilder.ConnectionStringBuilder.Port = 5432;
             });

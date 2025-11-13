@@ -107,7 +107,7 @@ public static class CustomerEndpoints
     }
 
 
-    public static async Task<Results<Ok<string>, IResult>> GetCustomerById(
+    public static async Task<IResult> GetCustomerById(
        Guid customerId,
        IMediator mediator,
        CancellationToken cancellation)
@@ -128,14 +128,11 @@ public static class CustomerEndpoints
         return TypedResults.Ok(result.Payload);
     }
 
-    public static async Task<Results<Ok<string>, IResult>> GetCustomers(
+    public static async Task<IResult> GetCustomers(
       [AsParameters] CustomerFilterRequest customerFilterRequest,
       IMediator mediator,
       CancellationToken cancellation)
     {
-        //CustomerFilterRequest customerFilterRequest = new();
-        //customerFilterRequest.FirstName = first_name;
-
         var result = await mediator.Send(customerFilterRequest, cancellation);
 
         if (result.IsError)

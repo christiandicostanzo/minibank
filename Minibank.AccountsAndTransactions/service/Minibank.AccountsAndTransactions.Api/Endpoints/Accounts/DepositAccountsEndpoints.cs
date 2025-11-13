@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using MiniBank.AccountsAndTransactions.Application.Dtos.Requests;
+using MiniBank.AccountsAndTransactions.Application.Interfaces;
 using MiniBank.AccountsAndTransactions.Domain.Entities;
-using MiniBank.ResultPattern;
 
 namespace MiniBank.AccountsAndTransactions.Api.Endpoints;
 
@@ -30,38 +30,36 @@ public static class DepositAccountEndpoints
 
     }
 
-    public static async Task<Results<Ok<string>, IResult>> GetDepositAccountById(
-      [FromRoute] Guid accountId,
+    public static async Task<IResult> GetDepositAccountById(
+      [FromRoute] Guid despoitAccountId,
+      IGetDepositAccountByIdUseCase getDepositAccountById,
       CancellationToken cancellation)
     {
 
-        throw new NotImplementedException();
+        var result = await getDepositAccountById.GetDepositAccountById(despoitAccountId, cancellation);
 
-        //var result = await mediator.Send(request, cancellation);
+        if (result.IsSuccess)
+        {
+            return TypedResults.Ok(result.Payload);
+        }
 
-        // if (result.IsSuccess)
-        // {
-        //     return TypedResults.Ok(result.Payload);
-        // }
-        //
-        // return TypedResults.BadRequest();
+        return TypedResults.BadRequest();
     }
 
-    public static async Task<Results<Ok<string>, IResult>> CreateDepositAccount(
-        Guid accountId,
-        CancellationToken cancellation)
+    public static async Task<IResult> CreateDepositAccount(
+        [FromBody] CreateDepositAccountRequest request,
+        ICreateDepositAccountUseCase createDepositAccountUseCase,
+        CancellationToken cancellationToken)
     {
 
-        throw new NotImplementedException();
+        var result = await createDepositAccountUseCase.CreateDepositAccount(request, cancellationToken);
 
-        //var result = await mediator.Send(request, cancellation);
+        if (result.IsSuccess)
+        {
+            return TypedResults.Ok(result.Payload);
+        }
 
-        // if (result.IsSuccess)
-        // {
-        //     return TypedResults.Ok(result.Payload);
-        // }
-        //
-        // return TypedResults.BadRequest();
+        return TypedResults.BadRequest();
     }
 
 }
