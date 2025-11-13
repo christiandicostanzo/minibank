@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MiniBank.AccountsAndTransactions.Domain.Entities;
+using MiniBank.AccountsAndTransactions.Domain.Repositories;
 using MiniBank.AccountsAndTransactions.Infrastructure;
 using MiniBank.AccountsAndTransactions.Infrastructure.Repositories;
-using System.Reflection;
 
 namespace MiniBank.AccountsAndTransactions.Application.DependencyInjection;
 
@@ -15,9 +16,8 @@ public static class ServiceExtensions
     static void RegisterRepositories(this IServiceCollection services)
     {
         services.AddScoped<MinibankDbContext>();
-        services.AddScoped<DepositAccountRepository>();
-
+        services.AddScoped<IBranchRepository, BranchRepository>();
+        services.AddScoped<IDepositAccountRepository,DepositAccountRepository>();
+        services.AddScoped<IFinancialTransactionRepository, FinancialTransactionRepository>();
     }
-
-    
 }

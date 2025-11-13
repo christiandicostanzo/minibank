@@ -5,7 +5,7 @@ using MiniBank.EntityFramework;
 
 namespace MiniBank.AccountsAndTransactions.Infrastructure.Configurations;
 
-public class AccountConfiguration : IEntityTypeConfiguration<DepositAccount>
+public class DepositAccountConfiguration : IEntityTypeConfiguration<DepositAccount>
 {
     public void Configure(EntityTypeBuilder<DepositAccount> builder)
     {
@@ -13,5 +13,8 @@ public class AccountConfiguration : IEntityTypeConfiguration<DepositAccount>
         builder.HasKey(d => d.EntityId);
         builder.Property(d => d.UpdatedDate).HasColumnName("updated_date");
         builder.ConfigureCommonFields();
+
+        builder.Property(d => d.AccountType).HasConversion<int>();
+        builder.Property(d => d.Status).HasConversion<int>();
     }
 }
