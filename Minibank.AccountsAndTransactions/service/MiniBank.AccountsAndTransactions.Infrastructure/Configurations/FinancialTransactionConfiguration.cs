@@ -10,15 +10,15 @@ internal class FinancialTransactionConfiguration : IEntityTypeConfiguration<Fina
     {
         builder.ToTable("transactions");
         builder.HasKey(t => t.EntityId);
-        builder.Property(t => t.DepositAccountId).IsRequired();
-        builder.Property(t => t.Type).HasConversion<int>().IsRequired();
+        builder.Property(t => t.DepositAccountId).HasColumnName("deposit_account_id");
+        builder.Property(t => t.Type).HasColumnName("type").HasConversion<int>();
         builder.Property(t => t.Amount).HasColumnType("decimal(18,2)").IsRequired();
-        builder.Property(t => t.Currency).IsRequired();
-        builder.Property(t => t.Timestamp).IsRequired();
-        builder.Property(t => t.Description);
-        builder.Property(t => t.Status).HasConversion<int>().IsRequired();
-        builder.Property(t => t.Channel).IsRequired();
-        builder.Property(t => t.ReferenceCode).IsRequired();
+        builder.Property(t => t.Currency).HasColumnName("currency");
+        builder.Property(t => t.Timestamp).HasColumnName("timestamp");
+        builder.Property(t => t.Description).HasColumnName("description");
+        builder.Property(t => t.Status).HasColumnName("status");
+        builder.Property(t => t.Channel).HasColumnName("chennel");
+        builder.Property(t => t.ReferenceCode).HasColumnName("reference_code");
     }
 
 }

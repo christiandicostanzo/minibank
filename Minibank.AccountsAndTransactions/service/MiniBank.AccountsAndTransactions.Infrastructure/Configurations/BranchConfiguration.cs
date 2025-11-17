@@ -12,20 +12,20 @@ internal class BranchConfiguration : IEntityTypeConfiguration<Branch>
     public void Configure(EntityTypeBuilder<Branch> builder)
     {
         builder.ToTable("branches");
-        builder.HasKey(d => d.EntityId);
         builder.ConfigureCommonFields();
-        builder.Property(b => b.Name).HasColumnName("Name");
-        builder.Property(b => b.Code).HasColumnName("Code");
-        builder.Property(b => b.PhoneNumber).HasColumnName("PhoneNumber");
+        builder.HasKey(d => d.EntityId);
+        builder.Property(b => b.Name).HasColumnName("name");
+        builder.Property(b => b.Code).HasColumnName("code");
+        builder.Property(b => b.PhoneNumber).HasColumnName("phone_number");
         
         builder.ComplexProperty(d => d.Address, address =>
         {
-            address.Property(a => a.Street);
-            address.Property(a => a.StreetNumber);
-            address.Property(a => a.City);
-            address.Property(a => a.Region);
-            address.Property(a => a.Country);
-            address.Property(a => a.PostalCode);
+            address.Property(a => a.Street).HasColumnName("street");
+            address.Property(a => a.StreetNumber).HasColumnName("street_number");
+            address.Property(a => a.City).HasColumnName("city");
+            address.Property(a => a.Region).HasColumnName("region");
+            address.Property(a => a.Country).HasColumnName("country");
+            address.Property(a => a.PostalCode).HasColumnName("postal_code");
         });
 
     }

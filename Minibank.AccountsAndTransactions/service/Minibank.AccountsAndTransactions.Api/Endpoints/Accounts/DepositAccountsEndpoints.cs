@@ -10,7 +10,7 @@ public static class DepositAccountEndpoints
     public static WebApplication AddAccountsEndpoints(this WebApplication app)
     {
 
-        var accountsApi = app.MapGroup("/deposit_accounts");
+        var accountsApi = app.MapGroup("/deposit-accounts");
 
         accountsApi
             .WithDisplayName("Accocunts and Transactions Api");
@@ -21,7 +21,7 @@ public static class DepositAccountEndpoints
             .WithSummary("Creates a new DepositAccount associated to a customer")
             .Produces<int>(201);
 
-        accountsApi.MapPost("/{depositAccountId}", GetDepositAccountById)
+        accountsApi.MapGet("/{depositAccountId}", GetDepositAccountById)
             .WithName("GetDepositAccountById")
             .WithSummary("Get a DepositAccount by id")
             .Produces<DepositAccount>(200); ;
@@ -31,7 +31,7 @@ public static class DepositAccountEndpoints
     }
 
     public static async Task<IResult> GetDepositAccountById(
-      [FromRoute] Guid despoitAccountId,
+      Guid despoitAccountId,
       IGetDepositAccountByIdUseCase getDepositAccountById,
       CancellationToken cancellation)
     {
