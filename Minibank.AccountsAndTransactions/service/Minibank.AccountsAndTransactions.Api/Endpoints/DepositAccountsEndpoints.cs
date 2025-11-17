@@ -3,7 +3,7 @@ using MiniBank.AccountsAndTransactions.Application.Dtos.Requests;
 using MiniBank.AccountsAndTransactions.Application.Interfaces;
 using MiniBank.AccountsAndTransactions.Domain.Entities;
 
-namespace MiniBank.AccountsAndTransactions.Api.Endpoints;
+namespace Minibank.AccountsAndTransactions.Api.Endpoints;
 
 public static class DepositAccountEndpoints
 {
@@ -59,7 +59,7 @@ public static class DepositAccountEndpoints
             return TypedResults.Ok(result.Payload);
         }
 
-        return TypedResults.BadRequest();
+        return TypedResults.BadRequest(result.Error);
     }
 
 }

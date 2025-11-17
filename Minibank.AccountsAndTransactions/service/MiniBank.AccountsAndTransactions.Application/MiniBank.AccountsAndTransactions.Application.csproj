@@ -16,4 +16,8 @@
     <Folder Include="Dtos\Responses\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.1.0" />
+  </ItemGroup>
+
 </Project>

@@ -18,8 +18,4 @@
 		<ProjectReference Include="..\MiniBank.AccountsAndTransactions.Application\MiniBank.AccountsAndTransactions.Application.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Endpoints\Transactions\" />
-	</ItemGroup>
-
 </Project>

@@ -1,4 +1,4 @@
-﻿using MiniBank.AccountsAndTransactions.Api.Endpoints;
+﻿using Minibank.AccountsAndTransactions.Api.Endpoints;
 
 public static class MiniBankEndpoints
 {
