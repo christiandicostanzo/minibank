@@ -1,7 +1,6 @@
-using MiniBank.AccountsAndTransactions.Infrastructure.Repositories;
-using MiniBank.AccountsAndTransactions.Infrastructure;
-using MiniBank.AccountsAndTransactions.Application;
 using MiniBank.AccountsAndTransactions.Domain.Entities;
+using MiniBank.AccountsAndTransactions.Infrastructure;
+using MiniBank.AccountsAndTransactions.Infrastructure.Repositories;
 
 
 namespace MiniBank.AccountsAndTransactions.UnitTests;
@@ -18,7 +17,7 @@ public class DatabaseTests
             var branch = new Branch
             {
                 Name = "Test Branch",
-                Code = $"TB001{DateTime.Now.Ticks.ToString().Substring(0,10)}" ,
+                Code = $"TB001{DateTime.Now.Ticks.ToString().Substring(0, 10)}",
                 PhoneNumber = "123-456-7890",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
@@ -88,4 +87,40 @@ public class DatabaseTests
         }
 
     }
+
+    [Fact]
+    public void Can_Save_Branch()
+    {
+        MinibankDbContext context = new();
+
+        IBranchRepository branchRepository = new BranchRepository(context);
+
+        if (context.Database.CanConnect())
+        {
+            var branch = new Branch
+            {
+                Name = "Test Branch",
+                Code = $"TB001{DateTime.Now.Ticks.ToString().Substring(0, 10)}",
+                PhoneNumber = "123-456-7890",
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow,
+                Address = new()
+                {
+                    City = "Test City",
+                    Street = "123 Test St",
+                    Country = "AR",
+                    PostalCode = "12345",
+                    Region = "Test Region",
+                    StreetNumber = "12345",
+                }
+            };
+
+            branchRepository.Save(branch, CancellationToken.None).GetAwaiter().GetResult();
+        }
+        else
+        {
+            Assert.True(false, "Cannot connect to the database.");
+        }
+    }
+
 }

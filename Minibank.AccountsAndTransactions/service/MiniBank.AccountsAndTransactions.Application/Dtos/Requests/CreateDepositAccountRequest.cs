@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json.Serialization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace MiniBank.AccountsAndTransactions.Application.Dtos.Requests;
+﻿namespace MiniBank.AccountsAndTransactions.Application.Dtos.Requests;
 
 public record CreateDepositAccountRequest
 (
