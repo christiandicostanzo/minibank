@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using MiniBank.Customers.Api.Endpoints.Grpc;
 using MiniBank.CustomersSrv.Api.Endpoints;
 using MiniBank.CustomersSrv.Application.DependencyInjection;
 using MiniBank.Exceptions;
 using MiniBank.ServiceRegistry;
 using Serilog;
 using System.Text.Json.Serialization.Metadata;
+using Grpc.AspNetCore.Web;
+using Grpc.AspNetCore;
 
 try
 {
@@ -23,6 +27,11 @@ try
     });
 
     builder.Services.AddHealthChecks();
+    builder.Services.AddGrpc((options) =>
+    {
+        options.EnableDetailedErrors = true;
+    });
+
     //builder.Services.RegisterConsulServiceDiscoveryProvider("customer-srv", "Customer Service");
     builder.Services.RegisterApplicationDependencies();
 
@@ -31,6 +40,16 @@ try
         lc.ReadFrom.Configuration(builder.Configuration);
         lc.Enrich.FromLogContext();
     });
+
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ListenLocalhost(5039, listenOptions =>
+        {
+            listenOptions.UseHttps(); // uses dev cert by default
+            listenOptions.Protocols = HttpProtocols.Http2; // needed for gRPC
+        });
+    });
+
 
     var app = builder.Build();
 
@@ -51,6 +70,12 @@ try
         });
     }
 
+  
+
+
+    //app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
+    app.MapGrpcService<GreeterService>();//.EnableGrpcWeb();
+    
     app.AddMiniBankEndpoints();
     //app.UseMiddleware<MiniBank.Security.JwtAuthenticationMiddleware>();
     app.UseMinibankCustomExceptionHandler();

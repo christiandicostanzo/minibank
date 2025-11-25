@@ -31,9 +31,9 @@ public class BranchEndpoints
 
 
     public static async Task<IResult> CreateBranch(
-   Guid despoitAccountId,
-   IGetDepositAccountByIdUseCase getDepositAccountById,
-   CancellationToken cancellation)
+    Guid despoitAccountId,
+    IGetDepositAccountByIdUseCase getDepositAccountById,
+    CancellationToken cancellation)
     {
 
         var result = await getDepositAccountById.GetDepositAccountById(despoitAccountId, cancellation);
@@ -46,5 +46,23 @@ public class BranchEndpoints
         return TypedResults.BadRequest();
     }
 
+
+    public static async Task<IResult> GetBranches(
+    IGetDepositAccountByIdUseCase getDepositAccountById,
+    CancellationToken cancellation)
+    {
+
+        //var result = await getDepositAccountById.GetDepositAccountById(despoitAccountId, cancellation);
+
+        //if (result.IsSuccess)
+        //{
+        //    return TypedResults.Ok(result.Payload);
+        //}
+        //
+        //return TypedResults.BadRequest();
+
+        throw new NotImplementedException();
+
+    }
 
 }
