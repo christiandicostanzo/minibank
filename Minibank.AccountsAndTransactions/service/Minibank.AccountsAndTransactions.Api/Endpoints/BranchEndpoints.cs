@@ -3,16 +3,16 @@ using MiniBank.AccountsAndTransactions.Domain.Entities;
 
 namespace Minibank.AccountsAndTransactions.Api.Endpoints;
 
-public class BranchEndpoints
+public static class BranchEndpoints
 {
 
- }public static WebApplication AddAccountsEndpoints(this WebApplication app)
+    public static WebApplication AddBranchEndpoints(this WebApplication app)
     {
 
-        var accountsApi = app.MapGroup("/deposit-accounts");
+        var accountsApi = app.MapGroup("/branches");
 
         accountsApi
-            .WithDisplayName("Accocunts and Transactions Api");
+            .WithDisplayName("Branches Api");
 
         accountsApi
             .MapPost("/", CreateBranch)
@@ -36,14 +36,16 @@ public class BranchEndpoints
     CancellationToken cancellation)
     {
 
-        var result = await getDepositAccountById.GetDepositAccountById(despoitAccountId, cancellation);
+        //var result = await getDepositAccountById.GetDepositAccountById(despoitAccountId, cancellation);
 
-        if (result.IsSuccess)
-        {
-            return TypedResults.Ok(result.Payload);
-        }
+        //if (result.IsSuccess)
+        //{
+        //    return TypedResults.Ok(result.Payload);
+        //}
 
-        return TypedResults.BadRequest();
+        //return TypedResults.BadRequest();
+
+        throw new NotImplementedException();
     }
 
 

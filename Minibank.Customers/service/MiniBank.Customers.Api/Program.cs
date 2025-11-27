@@ -12,7 +12,7 @@ using Grpc.AspNetCore;
 try
 {
 
-    var builder = WebApplication.CreateSlimBuilder(args);
+    var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.ConfigureHttpJsonOptions(options =>
     {
@@ -41,17 +41,17 @@ try
         lc.Enrich.FromLogContext();
     });
 
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenLocalhost(5039, listenOptions =>
-        {
-            listenOptions.UseHttps(); // uses dev cert by default
-            listenOptions.Protocols = HttpProtocols.Http2; // needed for gRPC
-        });
-    });
-
+    //builder.WebHost.ConfigureKestrel(options =>
+    //{
+    //    options.ListenLocalhost(5039, listenOptions =>
+    //    {
+    //        listenOptions.UseHttps(); // uses dev cert by default
+    //        listenOptions.Protocols = HttpProtocols.Http2; // needed for gRPC
+    //    });
+    //});
 
     var app = builder.Build();
+    app.UseHttpsRedirection();
 
     app.UsePathBase("/customers");
     app.MapHealthChecks("/healthz");
@@ -69,9 +69,6 @@ try
             config.DocExpansion = "list";
         });
     }
-
-  
-
 
     //app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
     app.MapGrpcService<GreeterService>();//.EnableGrpcWeb();
